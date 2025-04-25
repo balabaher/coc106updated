@@ -63,12 +63,13 @@
 
       <!-- Main Content -->
       <div class="col-md-10 main-content">
-        <!-- Search Section -->
-        <div class="mt-5">
+        <!-- Search and Add Patient Section -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
           <h3>Search Patients</h3>
-          <input type="text" id="searchInput" class="form-control" placeholder="Search by Name">
-          <button id="searchButton" class="btn btn-primary mt-2">Search</button>
+          <button id="addPatientBtn" class="btn btn-success">+ Add Patient</button>
         </div>
+        <input type="text" id="searchInput" class="form-control mt-3" placeholder="Search by Name">
+        <button id="searchButton" class="btn btn-primary mt-2">Search</button>
 
         <!-- Patient Records Table -->
         <table class="table table-bordered table-striped mt-5">
@@ -98,6 +99,12 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmcWh6b29ycHRobW5yamVjamtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MjUyMDksImV4cCI6MjA2MDMwMTIwOX0.zS9xjegQ1mYpt6OIZLEvD_cvXFIDmRy20-9wDLC2ASE';
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // Redirect to signup page on button click
+    document.getElementById('addPatientBtn').addEventListener('click', () => {
+      window.location.href = 'doctor_signup.html'; // Change to patient_signup.html if needed
+    });
+
+    // Search patients
     document.getElementById('searchButton').addEventListener('click', async () => {
       const searchTerm = document.getElementById('searchInput').value.trim();
       
@@ -147,8 +154,8 @@
       });
     }
 
-    async function viewPatientDetails(patientId) {
-      // Fetch the patient details based on the ID
+    // View patient detail
+    window.viewPatientDetails = async function (patientId) {
       const { data, error } = await supabase
         .from('patient_records')
         .select('*')
@@ -160,7 +167,6 @@
         return;
       }
 
-      // Store the patient ID and redirect to the patient details page
       localStorage.setItem('patientId', patientId);
       window.location.href = `patient_details.html?patientId=${patientId}`;
     }
